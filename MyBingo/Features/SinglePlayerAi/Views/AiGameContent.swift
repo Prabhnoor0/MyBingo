@@ -4,7 +4,6 @@
 //
 //  Created by Prabhnoor Kaur on 05/08/25.
 //
-
 import SwiftUI
 
 struct AIGameContent: View {
@@ -84,4 +83,3 @@ struct AIGameContent: View {
         }
     }
 }
-

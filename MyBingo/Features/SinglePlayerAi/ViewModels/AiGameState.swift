@@ -127,5 +127,6 @@ class AIGameState: ObservableObject {
     
     func endGame() {
         gameEnded = true
+        gameWinner = "Game ended by player"
     }
 }

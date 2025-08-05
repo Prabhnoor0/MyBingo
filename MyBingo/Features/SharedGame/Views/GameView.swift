@@ -10,6 +10,7 @@ import SwiftUI
 struct GameView: View {
     @ObservedObject var gameModeManager: GameModeManager
     @State private var showAlert = false
+    @State private var showEndGameAlert = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -28,16 +29,28 @@ struct GameView: View {
             Spacer(minLength: 10)
             
             ActionBar(
+                gameState: gameModeManager.aiGameState,
                 onNewGame: {
                     gameModeManager.startGame(mode: gameModeManager.selectedMode)
+                },
+                onEndGame: {
+                    showEndGameAlert = true
                 }
             )
         }
         .alert(gameModeManager.aiGameState.gameWinner ?? "", isPresented: $showAlert) {
             Button("OK", role: .cancel) { }
         }
-        .onChange(of: gameModeManager.aiGameState.gameWinner) { winner in
-            showAlert = winner != nil
+        .alert("End Game?", isPresented: $showEndGameAlert) {
+            Button("Cancel", role: .cancel) { }
+            Button("End Game", role: .destructive) {
+                gameModeManager.aiGameState.endGame()
+            }
+        } message: {
+            Text("Are you sure you want to end the current game?")
+        }
+        .onChange(of: gameModeManager.aiGameState.gameWinner) { oldValue, newValue in
+            showAlert = newValue != nil
         }
     }
 }
