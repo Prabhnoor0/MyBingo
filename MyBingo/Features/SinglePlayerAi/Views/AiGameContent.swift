@@ -10,47 +10,77 @@ import SwiftUI
 struct AIGameContent: View {
     @ObservedObject var gameState: AIGameState
     @State private var showAlert = false
-
-    let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 5)
-
+    @State private var showGameEndView = false
+    
     var body: some View {
-        VStack {
-            if let lastNum = gameState.aiHasChosenNumber {
-                Text("AI chose: \(lastNum)")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 40)
-            }
-
-            LazyVGrid(columns: columns, spacing: 2) {
-                ForEach(0..<25, id: \.self) { index in
-                    let number = gameState.playerBoardNumbers[index]
-                    BingoCell(
-                        number: number,
-                        isMarked: gameState.markedNumbers.contains(number),
-                        isDisabled: gameState.markedNumbers.contains(number) || !gameState.isPlayerTurn || gameState.gameEnded
-                    ) {
-                        gameState.playerClickedNumber(number)
-                    }
-                }
-            }
-            .frame(width: 250, height: 250)
-
-            Button("New Game") {
+        if showGameEndView {
+            GameEndView(gameState: gameState) {
+                showGameEndView = false
                 gameState.startNewGame()
             }
-            .font(.title2)
-            .foregroundStyle(.white)
-            .frame(width: 170, height: 55)
-            .background(Color.black)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+        } else {
+            gamePlayView
+        }
+    }
+    
+    private var gamePlayView: some View {
+        VStack {
+            // Game status messages
+            VStack(spacing: 8) {
+                if let playerChoice = gameState.lastPlayerChoice {
+                    Text("You chose: \(playerChoice)")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.blue)
+                }
+                
+                if let aiChoice = gameState.aiHasChosenNumber {
+                    Text("AI chose: \(aiChoice)")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.red)
+                } else if !gameState.isPlayerTurn && !gameState.gameEnded {
+                    Text("AI is thinking...")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.orange)
+                }
+                
+                if gameState.isPlayerTurn && !gameState.gameEnded {
+                    Text("Your turn!")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.green)
+                }
+            }
+            .frame(height: 80)
             .padding(.bottom, 20)
+            
+            // Player's board
+            BingoBoard(
+                title: "Your Board",
+                boardNumbers: gameState.playerBoardNumbers,
+                markedNumbers: gameState.markedNumbers,
+                completedLines: gameState.playerCompletedLines,
+                isDisabled: !gameState.isPlayerTurn || gameState.gameEnded
+            ) { number in
+                gameState.playerClickedNumber(number)
+            }
         }
         .alert(gameState.gameWinner ?? "", isPresented: $showAlert) {
-            Button("OK", role: .cancel) {}
+            Button("See Results") {
+                showAlert = false
+                showGameEndView = true
+            }
+            Button("New Game") {
+                showAlert = false
+                gameState.startNewGame()
+            }
         }
-        .onChange(of: gameState.gameWinner) { winner in
-            showAlert = winner != nil
+        .onChange(of: gameState.gameWinner) { oldValue, newValue in
+            if newValue != nil {
+                showAlert = true
+            }
         }
     }
 }

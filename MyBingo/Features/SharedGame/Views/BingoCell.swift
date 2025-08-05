@@ -14,10 +14,11 @@ struct BingoCell: View {
     let action: () -> Void
 
     var body: some View {
+        let fillColor: Color = isMarked ? .gray : .black
         Button(action: action) {
             ZStack {
                 RoundedRectangle(cornerRadius: 10)
-                    .fill(isMarked ? Color.gray : Color.black)
+                    .fill(fillColor)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.blue, lineWidth: 2)
@@ -26,7 +27,7 @@ struct BingoCell: View {
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.white)
             }
-            .aspectRatio(1, contentMode: .fit)
+            .aspectRatio(1, contentMode: .fit) // Ensures square cells
             .shadow(color: .gray, radius: 10, x: 0, y: 10)
         }
         .disabled(isDisabled)

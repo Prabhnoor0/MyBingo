@@ -17,25 +17,12 @@ struct GameView: View {
             
             Spacer(minLength: 10)
             
-            // Example with only AI game, switch as needed
             if gameModeManager.selectedMode == .singlePlayerAI {
-                PlayerInfoPanel(
-                    title: "You",
-                    subtitle: gameModeManager.aiGameState.isPlayerTurn ? "Your turn" : "AI's turn"
-                )
-                GameBoard(
-                    numbers: gameModeManager.aiGameState.playerBoardNumbers,
-                    markedNumbers: gameModeManager.aiGameState.markedNumbers,
-                    isDisabled: !gameModeManager.aiGameState.isPlayerTurn || gameModeManager.aiGameState.gameEnded
-                ) { number in
-                    gameModeManager.aiGameState.playerClickedNumber(number)
-                }
-                PlayerInfoPanel(
-                    title: "AI",
-                    subtitle: gameModeManager.aiGameState.isPlayerTurn ? "Waiting..." : "AI thinking"
-                )
+                AIGameContent(gameState: gameModeManager.aiGameState)
             } else if gameModeManager.selectedMode == .multiplayer {
-                // Insert MultiplayerGameBoard, Player panels, etc.
+                Text("Multiplayer Mode - Coming Soon!")
+                    .font(.title)
+                    .padding()
             }
             
             Spacer(minLength: 10)
