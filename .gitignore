@@ -43,3 +43,4 @@ build/
 # SwiftPM
 .build/
 Package.resolved
+MyBingo/GoogleService-Info.plist
