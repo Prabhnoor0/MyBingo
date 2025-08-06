@@ -21,22 +21,23 @@ struct GameView: View {
             if gameModeManager.selectedMode == .singlePlayerAI {
                 AIGameContent(gameState: gameModeManager.aiGameState)
             } else if gameModeManager.selectedMode == .multiplayer {
-                Text("Multiplayer Mode - Coming Soon!")
-                    .font(.title)
-                    .padding()
+                MultiplayerLobbyView(gameState: gameModeManager.multiplayerGameState)
             }
             
             Spacer(minLength: 10)
             
-            ActionBar(
-                gameState: gameModeManager.aiGameState,
-                onNewGame: {
-                    gameModeManager.startGame(mode: gameModeManager.selectedMode)
-                },
-                onEndGame: {
-                    showEndGameAlert = true
-                }
-            )
+            // Only show ActionBar for single player
+            if gameModeManager.selectedMode == .singlePlayerAI {
+                ActionBar(
+                    gameState: gameModeManager.aiGameState,
+                    onNewGame: {
+                        gameModeManager.startGame(mode: gameModeManager.selectedMode)
+                    },
+                    onEndGame: {
+                        showEndGameAlert = true
+                    }
+                )
+            }
         }
         .alert(gameModeManager.aiGameState.gameWinner ?? "", isPresented: $showAlert) {
             Button("OK", role: .cancel) { }
