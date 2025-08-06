@@ -4,73 +4,48 @@
 //
 //  Created by Prabhnoor Kaur on 04/08/25.
 //
+
+
 import SwiftUI
 
 struct ModeSelectionView: View {
     @StateObject private var gameModeManager = GameModeManager()
+    @State private var showGameView = false
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 30) {
+            VStack(spacing: 40) {
                 Text("MyBingo")
-                    .font(.system(.largeTitle, design: .rounded).weight(.black))
-                    .kerning(3)
-                    .italic()
-                    .foregroundColor(.gray)
-                    .padding(.top, 50)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
                 
-                Text("Choose Game Mode")
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .padding(.bottom, 20)
-                
-                ForEach(GameMode.allCases, id: \.self) { mode in
-                    GameModeButton(
-                        mode: mode,
-                        isSelected: gameModeManager.selectedMode == mode
-                    ) {
-                        gameModeManager.startGame(mode: mode)
+                VStack(spacing: 20) {
+                    // Single Player AI Button
+                    Button("vs AI") {
+                        gameModeManager.selectedMode = .singlePlayerAI
+                        showGameView = true
                     }
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 200, height: 55)
+                    .background(Color.blue)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                    // Multiplayer Button
+                    Button("Multiplayer") {
+                        gameModeManager.selectedMode = .multiplayer
+                        showGameView = true
+                    }
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 200, height: 55)
+                    .background(Color.green)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
                 }
-                
-                Spacer()
             }
-            .padding()
-            .fullScreenCover(isPresented: $gameModeManager.isInGame) {
-                GameView(gameModeManager: gameModeManager)
-            }
+        }
+        .fullScreenCover(isPresented: $showGameView) {
+            GameView(gameModeManager: gameModeManager)
         }
     }
 }
-
-struct GameModeButton: View {
-    let mode: GameMode
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(mode.rawValue)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    Spacer()
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
-                }
-                
-                Text(mode.description)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.leading)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(.systemGray6))
-            .cornerRadius(12)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
-

@@ -5,12 +5,6 @@
 //  Created by Prabhnoor Kaur on 05/08/25.
 //
 
-//
-//  MultiplayerLobbyView.swift
-//  MyBingo
-//
-//  Created by Prabhnoor Kaur on 05/08/25.
-//
 
 import SwiftUI
 

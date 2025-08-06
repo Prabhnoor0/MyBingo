@@ -5,48 +5,32 @@
 //  Created by Prabhnoor Kaur on 04/08/25.
 //
 
-import SwiftUI
-import Combine
 
-enum GameMode: String, CaseIterable {
-    case singlePlayerAI = "Single Player vs AI"
-    case multiplayer = "Multiplayer (7-8 Players)"
-    
-    var description: String {
-        switch self {
-        case .singlePlayerAI:
-            return "Play against AI opponent"
-        case .multiplayer:
-            return "Play with 7-8 friends online"
-        }
-    }
-}
+import SwiftUI
 
 class GameModeManager: ObservableObject {
     @Published var selectedMode: GameMode = .singlePlayerAI
-    @Published var isInGame: Bool = false
-    
-    // Single Player AI Game State
     @Published var aiGameState = AIGameState()
-    
-    // Multiplayer Game State
     @Published var multiplayerGameState = MultiplayerGameState()
     
-    func startGame(mode: GameMode) {
-        selectedMode = mode
-        isInGame = true
+    enum GameMode: CaseIterable {
+        case singlePlayerAI
+        case multiplayer
         
-        switch mode {
-        case .singlePlayerAI:
-            aiGameState.startNewGame()
-        case .multiplayer:
-            multiplayerGameState.startNewGame()
+        var displayName: String {
+            switch self {
+            case .singlePlayerAI: return "vs AI"
+            case .multiplayer: return "Multiplayer"
+            }
         }
     }
     
-    func endGame() {
-        isInGame = false
-        aiGameState.endGame()
-        multiplayerGameState.endGame()
+    func startGame(mode: GameMode) {
+        selectedMode = mode
+        if mode == .singlePlayerAI {
+            aiGameState.startNewGame()
+        } else if mode == .multiplayer {
+            multiplayerGameState.startNewGame()
+        }
     }
 }
