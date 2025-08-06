@@ -1,10 +1,10 @@
+
 //
 //  MultiplayerLobbyView.swift
 //  MyBingo
 //
 //  Created by Prabhnoor Kaur on 05/08/25.
 //
-
 
 import SwiftUI
 
@@ -238,9 +238,9 @@ struct RoomLobbyView: View {
                             .background(Color.blue.opacity(0.1))
                             .cornerRadius(10)
                         
-                        Button(action: {
+                        Button {
                             UIPasteboard.general.string = gameState.roomCode
-                        }) {
+                        } label: {
                             Image(systemName: "doc.on.doc")
                                 .foregroundColor(.blue)
                         }
@@ -340,7 +340,7 @@ struct PlayerListView: View {
             
             LazyVStack(spacing: 8) {
                 if let players = gameState.gameRoom?.players.values.sorted(by: { $0.joinedAt < $1.joinedAt }) {
-                    ForEach(Array(players), id: \.id) { player in
+                    ForEach(players, id: \.id) { player in
                         PlayerRowView(
                             player: player,
                             isHost: player.id == gameState.gameRoom?.hostId,
@@ -366,13 +366,13 @@ struct PlayerRowView: View {
     
     var body: some View {
         HStack {
-            // Player Avatar/Initial
+            // Player Avatar / Initial
             ZStack {
                 Circle()
                     .fill(isCurrentUser ? Color.blue : Color.gray.opacity(0.3))
                     .frame(width: 40, height: 40)
                 
-                Text(String(player.name.prefix(1).uppercased()))
+                Text(player.name.prefix(1).uppercased())
                     .font(.headline)
                     .foregroundColor(isCurrentUser ? .white : .primary)
             }
@@ -433,9 +433,8 @@ struct PlayerRowView: View {
     
     private func timeAgo(from date: Date) -> String {
         let interval = Date().timeIntervalSince(date)
-        if interval < 60 {
-            return "just now"
-        } else if interval < 3600 {
+        if interval < 60 { return "just now" }
+        else if interval < 3600 {
             let minutes = Int(interval / 60)
             return "\(minutes)m ago"
         } else {
@@ -445,7 +444,7 @@ struct PlayerRowView: View {
     }
 }
 
-// MARK: - Multiplayer Game View (Updated with Player Clicks)
+// MARK: - Multiplayer Game View (Clickable Board)
 struct MultiplayerGameView: View {
     @ObservedObject var gameState: MultiplayerGameState
     @State private var showWinnerAlert = false
@@ -458,7 +457,7 @@ struct MultiplayerGameView: View {
             // Current Number Display
             CurrentNumberDisplay(gameState: gameState)
             
-            // Player's BINGO Board - NOW CLICKABLE
+            // Player's BINGO Board
             if let currentUser = gameState.currentUser {
                 BingoBoard(
                     title: "Your Board",
@@ -484,7 +483,7 @@ struct MultiplayerGameView: View {
         } message: {
             Text(gameState.gameRoom?.gameWinner != nil ? "Winner: \(gameState.gameRoom?.players[gameState.gameRoom?.gameWinner ?? ""]?.name ?? "Unknown")" : "Game finished")
         }
-        .onChange(of: gameState.gameRoom?.gameWinner) { oldValue, newValue in
+        .onChange(of: gameState.gameRoom?.gameWinner) { _, newValue in
             showWinnerAlert = newValue != nil
         }
     }
@@ -517,7 +516,7 @@ struct MultiplayerGameHeader: View {
     }
 }
 
-// MARK: - Current Number Display (Updated)
+// MARK: - Current Number Display
 struct CurrentNumberDisplay: View {
     @ObservedObject var gameState: MultiplayerGameState
     
@@ -583,7 +582,7 @@ struct CurrentNumberDisplay: View {
     }
 }
 
-// MARK: - Multiplayer Game Controls (Updated)
+// MARK: - Multiplayer Game Controls
 struct MultiplayerGameControls: View {
     @ObservedObject var gameState: MultiplayerGameState
     
@@ -605,6 +604,11 @@ struct MultiplayerGameControls: View {
                     ProgressView("Calling number...")
                         .padding()
                 }
+            } else {
+                Text("Waiting for host to call numbers...")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .padding()
             }
             
             // BINGO Button - players can claim win
@@ -637,6 +641,7 @@ struct MultiplayerGameControls: View {
     
     private var canClaimBingo: Bool {
         guard let currentUser = gameState.currentUser else { return false }
+        // Player needs >=5 completed lines and must not have already won
         return currentUser.completedLines.count >= 5 && !currentUser.hasWon
     }
 }
