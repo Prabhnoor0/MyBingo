@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sage: #97B3AE;
+  --color-sage-light: #D2E0D3;
+  --color-sage-dark: #486856;
+  
+  --color-peach: #F2C3B9;
+  --color-peach-light: #F0DDD6;
+  
+  --color-cream: #F0EEEA;
+  --color-cream-warm: #D6CBBF;
+  
+  --color-accent-purple: #E0D7F5;
+  --color-accent-blue: #D6E4F0;
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F0EEEA;
+}
+::-webkit-scrollbar-thumb {
+  background: #97B3AE;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #486856;
+}
+
+/* Premium Glassmorphic utilities -> Flat Minimalist panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(151, 179, 174, 0.2);
+}
+
+.glass-panel-dark {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(151, 179, 174, 0.3);
+}
+
+/* Base Body Styling */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #333333;
+  background-color: #F0EEEA;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: #D2E0D3;
+  color: #486856;
+}
