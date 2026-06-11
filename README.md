@@ -1,8 +1,8 @@
-# Welly (MyBingo)
+# SageWillow
 
-Welly is a comprehensive web application designed to promote wellness, mindfulness, and gratitude. Built with a modern tech stack, it provides users with tools for mood tracking, gratitude journaling, meditations, and AI-powered interactions.
+SageWillow is a comprehensive web application designed to promote wellness, mindfulness, and gratitude. Built with a modern tech stack, it provides users with tools for mood tracking, gratitude journaling, meditations, and AI-powered interactions.
 
-## 🚀 Features
+##  Features
 
 - **Mood Tracking & Selector:** Track your daily emotions and see how you progress over time.
 - **Gratitude Journaling:** Add daily gratitude entries to foster a positive mindset.
@@ -11,7 +11,7 @@ Welly is a comprehensive web application designed to promote wellness, mindfulne
 - **Secure Authentication:** Robust user authentication built with Firebase and JWT.
 - **Media Uploads:** Seamless image uploads for your memories and gratitude entries, powered by Cloudinary.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **Framework:** React 19 + Vite
@@ -27,7 +27,7 @@ Welly is a comprehensive web application designed to promote wellness, mindfulne
 - **Media Storage:** Cloudinary + Multer
 - **Security:** Helmet, CORS, bcryptjs, jsonwebtoken
 
-## ⚙️ Prerequisites
+##  Prerequisites
 
 Before you begin, ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v18 or higher)
@@ -36,7 +36,7 @@ Before you begin, ensure you have the following installed:
 - Cloudinary Account
 - Google Gemini API Key
 
-## 📦 Installation & Setup
+##  Installation & Setup
 
 1. **Clone the repository:**
    ```bash
@@ -68,7 +68,7 @@ Before you begin, ensure you have the following installed:
    npm run dev
    ```
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
